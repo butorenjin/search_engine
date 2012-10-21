@@ -1,0 +1,20 @@
+{application, search_engine,
+ [
+  {description, "Search engine demo"},
+  {vsn, "1"},
+  {registered, []},
+  {modules, [ search_engine_app,
+	      search_engine_sup,
+	      search_engine_crawler,
+	      search_engine_indexer,
+	      search_engine_query,
+	      mochijson2 ]},
+  {applications, [
+                  kernel,
+                  stdlib,
+		  sasl,
+		  inets
+                 ]},
+  {mod, { search_engine_app, []}},
+  {env, []}
+ ]}.
