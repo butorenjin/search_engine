@@ -4,9 +4,20 @@
 -export([show_indexed/0, start_link/0, fetch_results/1]).
 
 
+%% Exported functions
+
+%% @doc fetch the results corresponding to the word.
+fetch_results(Word)->
+	 gen_server:call(search_engine_query, {search_query, Word}).
+
+%% @doc show all the words indexed with the URLs 
+show_indexed() ->
+	 gen_server:cast(search_engine_indexer, show_indexed).
+
 start_link()->
 	 gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
+%% Callback functions
 init([])->
 	error_logger:info_msg("Starting crawler~n"),
 	{ok, {["http://example.com:8080"],[]}, 0}.
@@ -39,12 +50,6 @@ handle_cast(crawl, {[Url|T], Crawled})->
 
 handle_cast(_, State)->
 	{noreply, State}.
-
-fetch_results(Word)->
-	 gen_server:call(search_engine_query, {search_query, Word}).
-
-show_indexed() ->
-	 gen_server:cast(search_engine_indexer, show_indexed).
 
 accumulate(_, _, [], Acc)->  Acc;
 accumulate(Url, Response, [[{Start, Length}]|T], Acc)->
